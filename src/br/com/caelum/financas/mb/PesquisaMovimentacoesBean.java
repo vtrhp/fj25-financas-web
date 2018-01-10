@@ -1,12 +1,15 @@
 package br.com.caelum.financas.mb;
 
 import java.util.List;
+
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import br.com.caelum.financas.dao.MovimentacaoDao;
 import br.com.caelum.financas.modelo.Conta;
 import br.com.caelum.financas.modelo.Movimentacao;
 import br.com.caelum.financas.modelo.TipoMovimentacao;
-
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
 
 @Named
 @RequestScoped
@@ -16,10 +19,19 @@ public class PesquisaMovimentacoesBean {
 	private Integer mes;
 	private TipoMovimentacao tipoMovimentacao;
 	private List<Movimentacao> movimentacoes;
+	
+	@Inject
+	private MovimentacaoDao dao;
 
 	
+	public void setMovimentacoes(List<Movimentacao> movimentacoes) {
+		this.movimentacoes = movimentacoes;
+	}
+
 	public void pesquisa() {
 		System.out.println("Pesquisando pelos filtros solicitados");
+		
+		movimentacoes = dao.pesquisa(getConta(), tipoMovimentacao, getMes());
 
 	}
 
